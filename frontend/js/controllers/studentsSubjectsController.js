@@ -11,6 +11,12 @@
 import { studentsAPI } from '../api/studentsAPI.js';
 import { subjectsAPI } from '../api/subjectsAPI.js';
 import { studentsSubjectsAPI } from '../api/studentsSubjectsAPI.js';
+//2.0
+//For pagination:
+let currentPage = 1;
+let totalPages = 1;
+const limit = 5;
+//loadRelations()
 
 document.addEventListener('DOMContentLoaded', () => 
 {
@@ -18,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () =>
     setupFormHandler();
     setupCancelHandler();
     loadRelations();
+     setupPaginationControls();//2.0
 });
 
 async function initSelects() 
@@ -90,6 +97,35 @@ function setupCancelHandler()
     });
 }
 
+//2.0
+function setupPaginationControls() 
+{
+    document.getElementById('prevPage').addEventListener('click', () => 
+    {
+        if (currentPage > 1) 
+        {
+            currentPage--;
+            loadRelations();
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => 
+    {
+        if (currentPage < totalPages) 
+        {
+            currentPage++;
+            loadRelations();
+        }
+    });
+
+    document.getElementById('resultsPerPage').addEventListener('change', e => 
+    {
+        currentPage = 1;
+        loadRelations();
+    });
+}
+
+
 function getFormData() 
 {
     return{
@@ -106,10 +142,12 @@ function clearForm()
     document.getElementById('relationId').value = '';
 }
 
+//2.0
 async function loadRelations() 
 {
     try 
     {
+        const resPerPage = parseInt(document.getElementById('resultsPerPage').value, 10) || limit;
         const relations = await studentsSubjectsAPI.fetchAll();
         
         /**
@@ -131,7 +169,9 @@ async function loadRelations()
         });
         
         renderRelationsTable(relations);
-    } 
+        totalPages = Math.ceil(data.total / resPerPage);
+        document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+    }   
     catch (err) 
     {
         console.error('Error cargando inscripciones:', err.message);
