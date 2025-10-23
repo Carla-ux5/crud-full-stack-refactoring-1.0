@@ -148,8 +148,9 @@ async function loadRelations()
     try 
     {
         const resPerPage = parseInt(document.getElementById('resultsPerPage').value, 10) || limit;
-        const relations = await studentsSubjectsAPI.fetchAll();
-        
+        const data = await studentsSubjectsAPI.fetchPaginated(currentPage, resPerPage);
+        console.log(data);     
+
         /**
          * DEBUG
          */
@@ -168,7 +169,7 @@ async function loadRelations()
             rel.approved = Number(rel.approved);
         });
         
-        renderRelationsTable(relations);
+        renderRelationsTable(data.relations);
         totalPages = Math.ceil(data.total / resPerPage);
         document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
     }   
