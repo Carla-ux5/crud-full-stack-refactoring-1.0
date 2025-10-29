@@ -30,6 +30,10 @@ function handleGet($conn)
 function handlePost($conn) 
 {
     $input = json_decode(file_get_contents("php://input"), true);
+   if ($input['age'])
+     http_reponse_code(400);
+     echo json_encode( ["error "=>"La edad debe ser mayo o igual a 18"]);
+     return;
 
     $result = createStudent($conn, $input['fullname'], $input['email'], $input['age']);
     if ($result['inserted'] > 0) 

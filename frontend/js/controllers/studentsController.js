@@ -32,7 +32,7 @@ function setupFormHandler()
         const student = getFormData();
      //mejor if(student.age<18) alert ("La edad debe ser igual a 18");return;
         try 
-        { if(student.age>=18){
+        { // no va: if(student.age>=18){
             if (student.id) 
             {
                 await studentsAPI.update(student);
@@ -46,8 +46,8 @@ function setupFormHandler()
             clearForm();
             loadStudents();
         }
-        }
-        else
+        //}
+        //else
             //mostrar error
         catch (err)
         {
