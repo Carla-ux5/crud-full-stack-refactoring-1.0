@@ -124,7 +124,7 @@ async function loadSubjects()
     } 
     catch (err) 
     {
-        console.error('Error cargando estudiantes:', err.message);
+        console.error('Error cargando materias:', err.message);
     }
 }
 
